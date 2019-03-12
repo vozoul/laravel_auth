@@ -3,10 +3,19 @@
 namespace App\Http\Controllers;
 
 use App\Article;
+use Core\Component\Auth;
 use Illuminate\Http\Request;
 
 class ArticleController extends Controller
 {
+
+    protected $request;
+
+    public function __construct(){
+        $this->middleware('auth')->except('index', 'show');
+        $this->request = Request::class;
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -42,12 +51,16 @@ class ArticleController extends Controller
         $article = new Article;
         $article->title = $request->input('title');
         $article->content = $request->input('content');
+
         /**
          *
          * associer ici le User
          *
          */
+        $article['user_id'] = auth()->id();
+
         $article->save();
+        return redirect(route('article.show', ['article' => $article]));
     }
 
     /**
@@ -71,16 +84,19 @@ class ArticleController extends Controller
      */
     public function edit(Article $article)
     {
-        return view('article.edit', [
-            'article' => $article
-        ]);
+
+        if(\Gate::allows('article', $article)){
+            return view('article.edit', ['article' => $article]);
+        }elseif(\Gate::denies('article', $article)){
+            return redirect(route( 'article.index'))->with('error', 'Vous n\'êtes pas l\'autheur de l\'article modification impossible');
+        }
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Article  $article
+     * @param  \App\Article $article
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, Article $article)

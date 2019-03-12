@@ -45,7 +45,10 @@
         </div>
     </nav>
 
+
+
     <div class="container py-3">
+        @include('flash-message')
         @yield('content')
     </div>
 </div>
