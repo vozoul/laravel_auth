@@ -1,5 +1,6 @@
 <?php
 
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
@@ -22,6 +23,14 @@ class CreateUsersTable extends Migration
             $table->rememberToken();
             $table->timestamps();
         });
+        DB::table('addresses')->insert([
+            'street' => '23 rue de la grenette',
+            'postCode' => '74370',
+            'city' => 'Epagny Metz Tessy',
+            'country' => 'France',
+            'created_at' => Carbon::today(),
+            'updated_at' => Carbon::today()
+        ]);
     }
 
     /**

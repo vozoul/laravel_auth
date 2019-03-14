@@ -88,7 +88,7 @@ class ArticleController extends Controller
         if(\Gate::allows('article', $article)){
             return view('article.edit', ['article' => $article]);
         }elseif(\Gate::denies('article', $article)){
-            return redirect(route( 'article.index'))->with('error', 'Vous n\'êtes pas l\'autheur de l\'article modification impossible');
+            return redirect(route( 'article.index'))->with('error', 'Vous n\'avez pas autorité pour cette action');
         }
     }
 
