@@ -8,11 +8,11 @@
     </p>
 
     {{-- seul l'auteur de l'article doit pouvoir afficher ce bouton --}}
-    {{--@can('edit', App\Article::class)--}}
-    @if($article->user_id == Auth::id())
+    @can('article', $article)
+{{--    @if($article->user_id == Auth::id())--}}
     <p>
         <a href="{{ route('article.edit', ['article' => $article]) }}">Editer</a>
     </p>
-    @endif
-    {{--@endcan--}}
+    {{--@endif--}}
+    @endcan
 @endsection
